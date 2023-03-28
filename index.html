@@ -10,6 +10,23 @@
     <script type="module" src="./app.js"></script>
 </head>
 <body>
-    <img src="https://1500019461.vod2.myqcloud.com/6cae8a7dvodcq1500019461/faf4c36f243791580836910413/auPCsgHIZuAA.jpg?vodencode=1" width="740" height="360" />
+    <img id="img_display" src="https://1500019461.vod2.myqcloud.com/6cae8a7dvodcq1500019461/faf4c36f243791580836910413/auPCsgHIZuAA.jpg?vodencode=1" width="740" height="360" />
+
+    
+    <br />
+    <p>请输入图片地址：</p>
+    <input style="width: 300px" id="img_input" />
+    <button id="btn-confirm">预览</button>
+
+
+    <script>
+        document.getElementById('btn-confirm').addEventListener('click', function() {
+            var value = document.getElementById('img_input').value;
+            if (value) {
+                document.getElementById('img_display').src = value;
+            }
+        });
+    </script>
+
 </body>
 </html>

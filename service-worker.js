@@ -590,7 +590,7 @@ var countMap = {};
 self.addEventListener('fetch', (event) => {
   console.log('fetch', event.request.method, event.request.url);
   var contentEncrypted = getUrlParameter(event.request.url, 'content_encrypt') || getUrlParameter(event.request.url, 'vodencode') ;
-  if (event.request.method === 'GET' && +contentEncrypted === 1) {
+  if (event.request.method === 'GET' && (+contentEncrypted === 1 || contentEncrypted === 'on')) {
     console.log('image targeted!');
     Object.assign(countMap, {[event.request.url]: countMap[event.request.url] || 0})
     if (countMap[event.request.url] === 0) {
