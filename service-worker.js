@@ -599,12 +599,16 @@ self.addEventListener('fetch', (event) => {
         decodeImage(event)
       )
     }
+    if (countMap[event.request.url]) {
+      countMap[event.request.url] = 0;
+    }
   }
 });
 
 async function decodeImage (event) {  
   var request = new Request(event.request.url, { mode: 'cors' });
   var response = await fetch(request).then(async (res) => {
+      countMap[event.request.url] = 0;
       var overlayKey = res.headers.get('x-meta-hash');
       var overlayIv = res.headers.get('x-meta-hash');
       var keyArray = [];
@@ -619,9 +623,9 @@ async function decodeImage (event) {
       var responseKey = new Uint8Array(buffer);
       var aesCbc = new aes.modeOfOperation.cbc(keyArray, ivArray);
       var decryptedKey = aesCbc.decrypt(responseKey);
-      countMap[event.request.url] = 0;
       return decryptedKey;
   }).catch((e) => {
+    countMap[event.request.url] = 0;
     console.log('e', e);
   });
   return new Response(response);

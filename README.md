@@ -25,7 +25,13 @@ const registration = await navigator.serviceWorker.register(
 
 相关业务逻辑在 service-worker.js 中，在这里对请求地址中 content_encrypt 为 on 的 GET 请求进行拦截，并解密处理，这个文件可以完全不用改动，集成到项目中即可。
 
+
+
+
+> 注：service worker 只能作用在 https 协议下，页面地址和图片地址都要使用 https 协议
+
 > 参考：https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API
+
 
 
 
