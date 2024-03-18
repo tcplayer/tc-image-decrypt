@@ -23,7 +23,7 @@ const registration = await navigator.serviceWorker.register(
 
 #### 2. 拦截请求并解密处理（参见 service-worker.js ） 
 
-相关业务逻辑在 service-worker.js 中，在这里对请求地址中 content_encrypt 为 on 的 GET 请求进行拦截，并解密处理，这个文件可以完全不用改动，集成到项目中即可。
+相关业务逻辑在 service-worker.js 中，在这里对 VOD 图片的 GET 请求进行拦截，并解密处理，这个文件可以完全不用改动，集成到项目中即可。
 
 
 

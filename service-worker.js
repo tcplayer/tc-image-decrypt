@@ -586,17 +586,35 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
+
+const broadcast = new BroadcastChannel('count-channel');
+broadcast.onmessage = (event) => {
+  if (event.data && event.data.type === 'INCREASE_COUNT') {
+    broadcast.postMessage({ payload: 'sw got message == 1!' });
+  }
+};
+
+
+self.addEventListener('message', (event) => {
+  console.log('event message', event);
+  event.source.postMessage("Hi client");
+});
+
 var countMap = {};
 self.addEventListener('fetch', (event) => {
-  console.log('fetch', event.request.method, event.request.url);
-  var contentEncrypted = getUrlParameter(event.request.url, 'content_encrypt') || getUrlParameter(event.request.url, 'vodencode') ;
-  if (event.request.method === 'GET' && (+contentEncrypted === 1 || contentEncrypted === 'on')) {
-    console.log('image targeted!');
+
+  broadcast.postMessage({ payload: 'sw got message == event in fetch! ' + event.request.url });
+
+  if (event.request.method === 'GET' && event.request.url.indexOf('vod2.myqcloud.com') > -1) {
+    
+    broadcast.postMessage({ payload: 'api targeted!' });
+
     Object.assign(countMap, {[event.request.url]: countMap[event.request.url] || 0})
     if (countMap[event.request.url] === 0) {
       countMap[event.request.url] = countMap[event.request.url] + 1;
       event.respondWith(
-        decodeImage(event)
+        decodeVideo(event)
+        // decodeImage(event)
       )
     }
     if (countMap[event.request.url]) {
@@ -605,12 +623,47 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
-async function decodeImage (event) {  
+async function decodeVideo (event) {
+  broadcast.postMessage({ payload: 'in decodeVideo!' });
+
   var request = new Request(event.request.url, { mode: 'cors' });
   var response = await fetch(request).then(async (res) => {
       countMap[event.request.url] = 0;
       var overlayKey = res.headers.get('x-meta-hash');
       var overlayIv = res.headers.get('x-meta-hash');
+      if (overlayKey) {
+        console.log('overlayKey', overlayKey);
+        var keyArray = [];
+        var ivArray = [];
+        for (let i = 0; i < 16; i++) {
+            var _key = overlayKey.substring(i * 2, i * 2 + 2);
+            var _iv = overlayIv.substring(i * 2, i * 2 + 2);
+            keyArray.push(parseInt(_key, 16));
+            ivArray.push(parseInt(_iv, 16));
+        }
+        var buffer = await res.clone().arrayBuffer();
+        var responseKey = new Uint8Array(buffer);
+        var aesCbc = new aes.modeOfOperation.cbc(keyArray, ivArray);
+        var decryptedKey = aesCbc.decrypt(responseKey);
+        return decryptedKey;
+      } else {
+        return await res.clone().arrayBuffer();;
+      }
+  }).catch((e) => {
+    countMap[event.request.url] = 0;
+    console.log('e', e);
+  });
+  return new Response(response);
+
+
+}
+
+async function decodeImage (event) {  
+  var request = new Request(event.request.url, { mode: 'cors' });
+  var response = await fetch(request).then(async (res) => {
+      countMap[event.request.url] = 0;
+      var overlayKey = 'c19fbe6136ef855e85662146719dbe13' || res.headers.get('x-meta-hash');
+      var overlayIv = '19ae85f8c14136bf5d32dfec931823dd' || res.headers.get('x-meta-hash');
       var keyArray = [];
       var ivArray = [];
       for (let i = 0; i < 16; i++) {

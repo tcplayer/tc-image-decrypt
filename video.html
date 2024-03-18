@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+  <title>腾讯云视频点播示例</title>
+
+  <script src="https://imgcache.qq.com/open/qcloud/video/tcplayer/libs/vconsole.min.3.3.0.js"></script>
+  <script>
+      var vConsole = new VConsole();
+  </script>
+
+  <script type="module" src="./app.js"></script>
+
+  <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v4.6.0/tcplayer.min.css" rel="stylesheet" />
+
+
+  <!--播放器脚本文件-->
+  <script src="./tcplayer.v4.7.2.js"></script>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .tcplayer {
+      margin: 0 auto;
+    }
+
+    @media screen and (max-width: 640px) {
+      #player-container-id {
+        width: 100%;
+        height: 270px;
+      }
+    }
+
+    /* 设置logo在高分屏的显示样式 */
+    @media only screen and (min-device-pixel-ratio: 2),
+    only screen and (-webkit-min-device-pixel-ratio: 2) {
+      .tcp-logo-img {
+        width: 50%;
+      }
+    }
+
+    #__vconsole .vc-panel {
+      min-height: 50%!important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 设置播放器容器 -->
+  <video id="player-container-id" preload="auto" width="640" height="360" playsinline webkit-playsinline>
+  </video>
+
+  <!-- <div id="video-wrapper">
+
+  </div> -->
+
+
+  <button id="switch">切换</button>
+  <!--
+注意事项：
+* 播放器容器必须为 video 标签
+* player-container-id 为播放器容器的ID，可自行设置
+* 播放器区域的尺寸请按需设置，建议通过 css 进行设置，通过css可实现容器自适应等效果
+* playsinline webkit-playsinline 这几个属性是为了在标准移动端浏览器不劫持视频播放的情况下实现行内播放，此处仅作示例，请按需使用
+* 设置 x5-playsinline 属性会使用 X5 UI 的播放器
+-->
+  <script>
+
+
+    setTimeout(function() {
+      // document.getElementById('video-wrapper').innerHTML = 
+      // `<video controls width="250">
+      //   <source src="http://1306264703.vod2.myqcloud.com/2d7f1c8avodtranscq1306264703/f3164b9b243791576943072647/voddrm.token.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9~eyJ0eXBlIjoiRHJtVG9rZW4iLCJhcHBJZCI6MTMwNjI2NDcwMywiZmlsZUlkIjoiMjQzNzkxNTc2OTQzMDcyNjQ3IiwiY3VycmVudFRpbWVTdGFtcCI6MCwiZXhwaXJlVGltZVN0YW1wIjoyMTQ3NDgzNjQ3LCJyYW5kb20iOjAsIm92ZXJsYXlLZXkiOiIiLCJvdmVybGF5SXYiOiIiLCJjaXBoZXJlZE92ZXJsYXlLZXkiOiI4ZjQzN2Q2Mjk5NjEwZTk3NDBlNTY0NDU4MWE1ODQ5MjY0ODIxNjFmZGI0NzkyZDdiZTgyMGE1Yzg5NzRkMWZkZWI3YTk0Y2EwMTRlMWMyOWMyYjc5NzYwODA3ZGRhZGRlYWJlM2NjYzU1OGNhZGZlOTQ0NWFjM2QwMmViZjJmOWIwY2UzYTMwZDIzMTc1NzdhNjRmYTEyYzhlMzE2ZWY4YWMxNTY2MTM5M2U5ZjE2MDUxZTE2YTZlM2I0OTU2Yzc3Yzc4Njg0NmRiOTcxZjFkZjQ3MjYxOGZhYjA2OWMyMmQ1OTA4NTMxYmMxNzVmNDgyZGRkYTExMWJlZDRjOGNmIiwiY2lwaGVyZWRPdmVybGF5SXYiOiI4ZGI4YTQyMDg2MWEwN2E1OGZhNzcxOThkMDNlYWM4Mzk1ZWY5ZWU1YmFiOWM4NWU0NmQzMWI2OGY3YTg4Y2YzZDM1NWFhODgwOGVhODRlZThmZjA3ZGExNTVmZmViZjFhMzhiY2U5OTYxY2U3ZGQxZjdlZjRkYzRhMzZhZmZlZGEzYjU2ODViM2M2MWYyODgzOWQxZDkxM2ZhMjhhZmJkMzAzNWJmNzhhYTIxZmE3NmQ2YjQwMjlkMDhiMjkzMjQ2OTdjNjg1N2YxMmFlNmI2NzVhNWNhNmQ1NDAwYTU3ZDk2MTUyZGRkZTA2MmNiZjFiNmZjZTBmZTdhN2ExYjEwIiwia2V5SWQiOjEsInN0cmljdE1vZGUiOjAsInBlcnNpc3RlbnQiOiIiLCJyZW50YWxEdXJhdGlvbiI6MCwiZm9yY2VMMVRyYWNrVHlwZXMiOm51bGx9~5tYPRTxGaBswS5RUWDvJfb53qVvsWlFxQpsmljIZEH0.adp.12.m3u8"></source>
+      // </video>`;
+
+      var player = TCPlayer('player-container-id', { // player-container-id 为播放器容器ID，必须与html中一致
+        // 6. AES
+
+        reportable: false,
+        fileID: '243791576943072647',
+        appID: '1306264703',
+        psign: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6MTMwNjI2NDcwMywiZmlsZUlkIjoiMjQzNzkxNTc2OTQzMDcyNjQ3IiwiY3VycmVudFRpbWVTdGFtcCI6MTY3MDQ2OTk3MSwiY29udGVudEluZm8iOnsiYXVkaW9WaWRlb1R5cGUiOiJQcm90ZWN0ZWRBZGFwdGl2ZSIsImRybUFkYXB0aXZlSW5mbyI6eyJwcml2YXRlRW5jcnlwdGlvbkRlZmluaXRpb24iOjEyfX0sInVybEFjY2Vzc0luZm8iOnsiZG9tYWluIjoiMTMwNjI2NDcwMy52b2QyLm15cWNsb3VkLmNvbSIsInNjaGVtZSI6IkhUVFBTIn19.FOcmChHfrGY9tYCDn20MSQi-IqvQ9U_U6qLNgx9MhLg',
+        
+      });
+    }, 5000);
+  </script>
+</body>
+
+</html>
