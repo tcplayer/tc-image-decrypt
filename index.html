@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-    <img id="img_display" src="https://1500019461.vod2.myqcloud.com/6cae8a7dvodcq1500019461/1a625a12243791581317117962/f0.png!P10000.png" width="740" />
+    <img id="img_display" src="" width="740" />
 
     <br />
     <p>请输入图片地址：</p>
@@ -24,6 +24,13 @@
 
 
     <script>
+
+        // 页面初始化时就开始注册sw
+        // 注册之后，即可正常拦截图片请求，这里通过延迟模拟业务接口请求图片资源再加载的过程，保证先注册再请求图片的顺序
+        setTimeout(function() {
+            document.getElementById('img_display').src = 'https://1500019461.vod2.myqcloud.com/6cae8a7dvodcq1500019461/1a625a12243791581317117962/f0.png!P10000.png';
+        }, 500);
+
         document.getElementById('btn-confirm').addEventListener('click', function() {
             var value = document.getElementById('img_input').value;
             if (value) {
